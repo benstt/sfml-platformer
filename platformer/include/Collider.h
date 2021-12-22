@@ -18,6 +18,7 @@ public:
     bool isCollidingX(float x) const;
     bool isCollidingY(float y) const;
     bool isPointInside(sf::Vector2f point) const;
+    bool isColliderInsideAt(sf::Vector2f position, const Collider& col) const;
 
     float X() const;
     float Y() const;

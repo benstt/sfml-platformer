@@ -3,7 +3,7 @@ project(platformer)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(platformer src/main.cpp include/Game.h src/Game.cpp include/Actor.h src/Actor.cpp include/KeyboardManager.h src/KeyboardManager.cpp include/Collider.h src/Collider.cpp include/EntityTracker.h src/EntityTracker.cpp include/Entity.h src/Entity.cpp include/TileMap.h src/TileMap.cpp)
+add_executable(platformer src/main.cpp src/Game.cpp src/Actor.cpp src/KeyboardManager.cpp src/Collider.cpp src/EntityTracker.cpp src/Entity.cpp src/TileMap.cpp src/AnimationPlayer.cpp)
 
 include_directories(include h:/SFML/include)
 

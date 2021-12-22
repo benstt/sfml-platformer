@@ -25,7 +25,7 @@ public:
     sf::Vector2f getPosition() const;
     const Collider& getCollider() const;
 
-    void update();
+    virtual void update(float delta);
 protected:
     float x, y;
     std::shared_ptr<sf::Texture> m_Texture;

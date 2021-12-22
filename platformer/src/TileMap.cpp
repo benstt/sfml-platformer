@@ -6,7 +6,7 @@
 #include "Entity.h"
 #include <iostream>
 
-TileMap::TileMap(unsigned int amountX, unsigned int amountY, const int* tiles) : m_TilesX(amountX), m_TilesY(amountY) {
+TileMap::TileMap(uint32_t amountX, uint32_t amountY, const int* tiles) : m_TilesX(amountX), m_TilesY(amountY) {
     /*
      * - try to load texture from path
      * - set VertexArray
@@ -20,8 +20,8 @@ TileMap::TileMap(unsigned int amountX, unsigned int amountY, const int* tiles) :
     this->m_Vertices.setPrimitiveType(sf::Quads);
     this->m_Vertices.resize(amountX * amountY * 4);
 
-    for (unsigned int i = 0; i < amountX; ++i) {
-        for (unsigned int j = 0; j < amountY; ++j) {
+    for (uint32_t i = 0; i < amountX; ++i) {
+        for (uint32_t j = 0; j < amountY; ++j) {
             // https://www.sfml-dev.org/tutorials/2.1/graphics-vertex-array.php#example-tile-map
             // get current tile number
             int tileNumber = tiles[i + j * amountX];
@@ -48,7 +48,7 @@ TileMap::TileMap(unsigned int amountX, unsigned int amountY, const int* tiles) :
     }
 }
 
-TileMap::TileMap(const std::string& texturePath, unsigned int amountX, unsigned int amountY, const sf::Image& source)
+TileMap::TileMap(const std::string& texturePath, uint32_t amountX, uint32_t amountY, const sf::Image& source)
     : m_TilesX(amountX), m_TilesY(amountY) {
     /*
      * - try to load texture from path
@@ -67,11 +67,11 @@ TileMap::TileMap(const std::string& texturePath, unsigned int amountX, unsigned 
     this->m_Vertices.resize(amountX * amountY * 4);
 
     // check every pixel color on the image
-    for (unsigned int i = 0; i < amountX; ++i) {
-        for (unsigned int j = 0; j < amountY; ++j) {
-            unsigned int r = source.getPixel(i * TILE_SIZE, j * TILE_SIZE).r;
-            unsigned int g = source.getPixel(i * TILE_SIZE, j * TILE_SIZE).g;
-            unsigned int b = source.getPixel(i * TILE_SIZE, j * TILE_SIZE).b;
+    for (uint32_t i = 0; i < amountX; ++i) {
+        for (uint32_t j = 0; j < amountY; ++j) {
+            uint32_t r = source.getPixel(i, j).r;
+            uint32_t g = source.getPixel(i, j).g;
+            uint32_t b = source.getPixel(i, j).b;
 
             // put tiles depending on the color
             switch (r, g, b) {
@@ -82,12 +82,24 @@ TileMap::TileMap(const std::string& texturePath, unsigned int amountX, unsigned 
                 case (31, 60, 65):
                     this->putTile(i, j, TileType::BigPlatformFactory, source);
                     break;
+                case (153, 229, 80):
+                    this->putTile(i, j, TileType::FlowerSmall, source);
+                    break;
+                case (55, 148, 110):
+                    this->putTile(i, j, TileType::FlowerBig, source);
+                    break;
+                case (75, 105, 47):
+                    this->putTile(i, j, TileType::WeedSmall, source);
+                    break;
+                case (81, 93, 61):
+                    this->putTile(i, j, TileType::WeedBig, source);
+                    break;
             }
         }
     }
 }
 
-void TileMap::putTile(unsigned int i, unsigned int j, TileType tile, const sf::Image& source) {
+void TileMap::putTile(uint32_t i, uint32_t j, TileType tile, const sf::Image& source) {
     /*
      * @return void
      * - update quad position's and texture
@@ -104,12 +116,28 @@ void TileMap::putTile(unsigned int i, unsigned int j, TileType tile, const sf::I
     sf::Vertex* quad = &this->m_Vertices[(i + j * this->m_TilesX) * vertsAmount];
 
     // get texture that should be drawn based on neighbors
-    float tu = this->getAutotileOffsetX(i * TILE_SIZE, j * TILE_SIZE, source);
-    float tv = this->getAutotileOffsetY(i * TILE_SIZE, j * TILE_SIZE, source);
+    float tu = this->getAutotileOffsetX(i, j, source);
+    float tv = this->getAutotileOffsetY(i, j, source);
 
     // set texture coordinates
     switch (tile) {
         case TileType::Decorator:
+            break;
+        case TileType::FlowerSmall:
+            tu = 256;
+            tv = 0;
+            break;
+        case TileType::FlowerBig:
+            tu = 272;
+            tv = 0;
+            break;
+        case TileType::WeedSmall:
+            tu = 256;
+            tv = 16;
+            break;
+        case TileType::WeedBig:
+            tu = 272;
+            tv = 16;
             break;
         case TileType::BigPlaformSimple:
             tu += 176;
@@ -148,7 +176,7 @@ void TileMap::putTile(unsigned int i, unsigned int j, TileType tile, const sf::I
         case TileType::BigPlatformBricks:
         case TileType::BigPlatformTinyBricks:
             // instance entity to check colliders and stuff
-            auto* newTile = new Entity(i * 16, j * 16);
+            auto* newTile = new Entity(i * TILE_SIZE, j * TILE_SIZE);
             this->m_Colliders.push_back(newTile->getCollider());
             break;
     }
@@ -166,7 +194,7 @@ void TileMap::putTile(unsigned int i, unsigned int j, TileType tile, const sf::I
     quad[3].texCoords = sf::Vector2f(tu, (tv + TILE_SIZE));
 }
 
-int TileMap::getPixelColor(unsigned int i, unsigned int j, const sf::Image &source) {
+uint32_t TileMap::getPixelColor(uint32_t i, uint32_t j, const sf::Image &source) {
     /*
      * @return the color mapped to a pixel
      * Returns the pixel color of the image at the given pixel.
@@ -175,7 +203,35 @@ int TileMap::getPixelColor(unsigned int i, unsigned int j, const sf::Image &sour
     return source.getPixel(i, j).toInteger();
 }
 
-float TileMap::getAutotileOffsetX(unsigned int i, unsigned int j, const sf::Image& source) {
+bool TileMap::sameColorX(uint32_t i, uint32_t j, uint32_t offset, const sf::Image &source) {
+    /*
+     * @return if the pixel at i, j has the same color as offset, j
+     * Returns if the pixel has the same color as the given offset.
+     */
+
+    // check for adjacent tile
+    if (this->getPixelColor(i, j, source) == this->getPixelColor(offset, j, source)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool TileMap::sameColorY(uint32_t i, uint32_t j, uint32_t offset, const sf::Image &source) {
+    /*
+     * @return if the pixel at i, j has the same color as i, offset
+     * Returns if the pixel has the same color as the given offset.
+     */
+
+    // check for adjacent tile
+    if (this->getPixelColor(i, j, source) == this->getPixelColor(i, offset, source)) {
+        return true;
+    }
+
+    return false;
+}
+
+float TileMap::getAutotileOffsetX(uint32_t i, uint32_t j, const sf::Image& source) {
     /*
      * @return the X offset of the tile that should be placed
      * relative to the middle tile of the block
@@ -183,29 +239,21 @@ float TileMap::getAutotileOffsetX(unsigned int i, unsigned int j, const sf::Imag
      * - return the offset
      *
      * Gets the X offset of the tile on the source image.
+     * A return of 0 means that it will be placed the same texture (the middle one of the 3x3 block).
      */
 
     // check if the adjacent cell has the same color
-    auto sameColorX = [this](float i, float j, const sf::Image& source, int offset) {
-        if (this->getPixelColor(i, j, source) == this->getPixelColor(i + offset, j, source)) {
-            return true;
-        }
-
-        return false;
-    };
-
-    // check top
-    // top left
-    if (i >= 16 && i <= 368 && sameColorX(i, j, source, -TILE_SIZE)) {
-        // top right
-        if (sameColorX(i, j, source, TILE_SIZE)) {
+    // left
+    if (i > 0 && this->sameColorX(i, j, i-1, source)) {
+        // right
+        if (i < this->m_TilesX && this->sameColorX(i, j, i+1, source)) {
             // middle, get same texture
             return 0;
         }
 
         return TILE_SIZE;
-    } else if (sameColorX(i, j, source, TILE_SIZE)) {
-        // get top right
+    } else if (i < this->m_TilesX && this->sameColorX(i, j, i+1, source)) {
+        // get right
         return -TILE_SIZE;
     }
 
@@ -215,7 +263,7 @@ float TileMap::getAutotileOffsetX(unsigned int i, unsigned int j, const sf::Imag
     return TILE_SIZE * 2;
 }
 
-float TileMap::getAutotileOffsetY(unsigned int i, unsigned int j, const sf::Image& source) {
+float TileMap::getAutotileOffsetY(uint32_t i, uint32_t j, const sf::Image& source) {
     /*
      * @return the Y offset of the tile that should be placed
      * relative to the middle tile of the block
@@ -223,29 +271,21 @@ float TileMap::getAutotileOffsetY(unsigned int i, unsigned int j, const sf::Imag
      * - return the offset
      *
      * Gets the Y offset of the tile on the source image.
+     * A return of 0 means that it will be placed the same texture (the middle one of the 3x3 block).
      */
 
     // check if the adjacent cell has the same color
-    auto sameColorY = [this](float i, float j, const sf::Image& source, int offset) {
-        if (this->getPixelColor(i, j, source) == this->getPixelColor(i, j + offset, source)) {
-            return true;
-        }
-
-        return false;
-    };
-
-    // check center
-    // center top
-    if (j >= 16 && j <= 208 && sameColorY(i, j, source, -TILE_SIZE)) {
-        // center bottom
-        if (sameColorY(i, j, source, TILE_SIZE)) {
+    // top
+    if (j > 0 && sameColorY(i, j, j-1, source)) {
+        // bottom
+        if (j < this->m_TilesY && sameColorY(i, j, j+1, source)) {
             // middle, get same texture
             return 0;
         }
 
         return TILE_SIZE;
-    } else if (sameColorY(i, j, source, TILE_SIZE)) {
-        // get center top
+    } else if (j < this->m_TilesY && sameColorY(i, j, j+1, source)) {
+        // get top
         return -TILE_SIZE;
     }
 

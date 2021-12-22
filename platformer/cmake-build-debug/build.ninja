@@ -117,6 +117,13 @@ build CMakeFiles/platformer.dir/src/TileMap.cpp.obj: CXX_COMPILER__platformer_De
   OBJECT_DIR = CMakeFiles\platformer.dir
   OBJECT_FILE_DIR = CMakeFiles\platformer.dir\src
 
+build CMakeFiles/platformer.dir/src/AnimationPlayer.cpp.obj: CXX_COMPILER__platformer_Debug H$:/code/cc/platformer/src/AnimationPlayer.cpp || cmake_object_order_depends_target_platformer
+  DEP_FILE = CMakeFiles\platformer.dir\src\AnimationPlayer.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -IH:/code/cc/platformer/include -Ih:/SFML/include -IH:/SFML/include
+  OBJECT_DIR = CMakeFiles\platformer.dir
+  OBJECT_FILE_DIR = CMakeFiles\platformer.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target platformer
@@ -125,7 +132,7 @@ build CMakeFiles/platformer.dir/src/TileMap.cpp.obj: CXX_COMPILER__platformer_De
 #############################################
 # Link the executable platformer.exe
 
-build platformer.exe: CXX_EXECUTABLE_LINKER__platformer_Debug CMakeFiles/platformer.dir/src/main.cpp.obj CMakeFiles/platformer.dir/src/Game.cpp.obj CMakeFiles/platformer.dir/src/Actor.cpp.obj CMakeFiles/platformer.dir/src/KeyboardManager.cpp.obj CMakeFiles/platformer.dir/src/Collider.cpp.obj CMakeFiles/platformer.dir/src/EntityTracker.cpp.obj CMakeFiles/platformer.dir/src/Entity.cpp.obj CMakeFiles/platformer.dir/src/TileMap.cpp.obj | H$:/SFML/lib/libsfml-system-d.a H$:/SFML/lib/libsfml-window-d.a H$:/SFML/lib/libsfml-graphics-d.a H$:/SFML/lib/libsfml-network-d.a H$:/SFML/lib/libsfml-audio-d.a
+build platformer.exe: CXX_EXECUTABLE_LINKER__platformer_Debug CMakeFiles/platformer.dir/src/main.cpp.obj CMakeFiles/platformer.dir/src/Game.cpp.obj CMakeFiles/platformer.dir/src/Actor.cpp.obj CMakeFiles/platformer.dir/src/KeyboardManager.cpp.obj CMakeFiles/platformer.dir/src/Collider.cpp.obj CMakeFiles/platformer.dir/src/EntityTracker.cpp.obj CMakeFiles/platformer.dir/src/Entity.cpp.obj CMakeFiles/platformer.dir/src/TileMap.cpp.obj CMakeFiles/platformer.dir/src/AnimationPlayer.cpp.obj | H$:/SFML/lib/libsfml-system-d.a H$:/SFML/lib/libsfml-window-d.a H$:/SFML/lib/libsfml-graphics-d.a H$:/SFML/lib/libsfml-network-d.a H$:/SFML/lib/libsfml-audio-d.a
   FLAGS = -g
   LINK_LIBRARIES = H:/SFML/lib/libsfml-system-d.a  H:/SFML/lib/libsfml-window-d.a  H:/SFML/lib/libsfml-graphics-d.a  H:/SFML/lib/libsfml-network-d.a  H:/SFML/lib/libsfml-audio-d.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\platformer.dir

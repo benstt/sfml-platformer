@@ -5,7 +5,7 @@
 #ifndef PLATFORMER_KEYBOARDMANAGER_H
 #define PLATFORMER_KEYBOARDMANAGER_H
 
-#include <SFML/Window.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <set>
 
 class KeyboardManager {

@@ -3,6 +3,7 @@
 //
 
 #include "KeyboardManager.h"
+#include <iostream>
 
 std::set<sf::Keyboard::Key> KeyboardManager::s_KeysPressed {};
 
@@ -14,10 +15,6 @@ bool KeyboardManager::isBeingPressed(sf::Keyboard::Key key) {
      *
      * Checks if the user is holding the given key.
      */
-
-    // delete the key from the collection if exists
-    if (KeyboardManager::s_KeysPressed.contains(key))
-        KeyboardManager::s_KeysPressed.erase(key);
 
     if (sf::Keyboard::isKeyPressed(key)) {
         KeyboardManager::s_KeysPressed.insert(key);
@@ -58,6 +55,7 @@ bool KeyboardManager::released(sf::Keyboard::Key key) {
      * Checks if the user has released the given key.
      */
 
+    // check if the collection has the key
     if (!sf::Keyboard::isKeyPressed(key) && KeyboardManager::s_KeysPressed.contains(key)) {
         KeyboardManager::s_KeysPressed.erase(key);
         return true;

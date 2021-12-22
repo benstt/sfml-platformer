@@ -17,7 +17,7 @@ public:
 
     bool isRunning() const;
 
-    void update();
+    void update(float delta);
     void render();
 private:
     std::unique_ptr<sf::RenderWindow> m_Window;

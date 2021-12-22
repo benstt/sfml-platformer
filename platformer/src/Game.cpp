@@ -18,11 +18,12 @@ Game::Game() {
      */
 
     this->createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Platformer");
-    this->m_Player = std::make_unique<Actor>(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, "../res/sprite.png");
+    this->m_Player = std::make_unique<Actor>(WINDOW_WIDTH / 2 - 5, WINDOW_HEIGHT / 2, "../res/player_running1.png");
     this->m_Enemy = std::make_unique<Actor>(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4, "../res/sprite.png");
 
+    // create tilemap from image
     sf::Image map;
-    map.loadFromFile("../res/test.png");
+    map.loadFromFile("../res/test2.png");
     this->m_TileMap = TileMap("../res/tileset.png", WINDOW_WIDTH / 16, WINDOW_HEIGHT / 16, map);
     this->m_Window->setFramerateLimit(60);
 }
@@ -37,7 +38,7 @@ bool Game::isRunning() const {
     return this->m_Window->isOpen();
 }
 
-void Game::update() {
+void Game::update(float delta) {
     /*
      * @return void
      * - poll events
@@ -49,25 +50,8 @@ void Game::update() {
      */
 
     this->pollEvents();
-    // this->m_Player->update();
+    this->m_Player->update(delta);
     // this->m_Enemy->update();
-
-    // check for keyboard presses
-    if (KeyboardManager::isBeingPressed(sf::Keyboard::A)) {
-        this->m_Player->move(-1.f, 0.f);
-    }
-
-    if (KeyboardManager::isBeingPressed(sf::Keyboard::D)) {
-        this->m_Player->move(1.f, 0.f);
-    }
-
-    if (KeyboardManager::isBeingPressed(sf::Keyboard::W)) {
-        this->m_Player->move(0.f, -1.f);
-    }
-
-    if (KeyboardManager::isBeingPressed(sf::Keyboard::S)) {
-        this->m_Player->move(0.f, 1.f);
-    }
 }
 
 void Game::render() {

@@ -75,6 +75,28 @@ bool Collider::isCollidingY(float y) const {
     return (y < this->y) ? this->y - y == 1 : y - this->y + this->h == 1;
 }
 
+bool Collider::isPointInside(sf::Vector2f point) const {
+    /*
+     * @return if the point is inside the collider
+     * Returns if the given point is inside the collider.
+     */
+
+    return  (point.x >= this->x && point.x <= this->x + this->w) &&
+            (point.y >= this->y && point.y <= this->y + this->h);
+}
+
+bool Collider::isColliderInsideAt(sf::Vector2f position, const Collider& col) const {
+    /*
+     * @return if the collider is inside the given collider at the given position.
+     * Returns if the colliders will collide at the given position.
+     */
+
+    return  (col.isPointInside(position)
+            || col.isPointInside({ position.x + this->W(), position.y })
+            || col.isPointInside({ position.x, position.y + this->H() })
+            || col.isPointInside({ position.x + this->W(), position.y + this->H() }));
+}
+
 float Collider::X() const {
     /*
      * @return X coordinate
